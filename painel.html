@@ -2,27 +2,42 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Painel do Usuário</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
-  <script src="firebase.js"></script>
+  <meta charset="UTF-8" />
+  <title>Painel - Tarefa por Hora</title>
+  <script src="firebase.js" type="module"></script>
+  <script src="painel.js" type="module"></script>
+  <script async src="ads.js"></script>
 </head>
 <body>
-  <h2>Bem-vindo <span id="user-email"></span></h2>
-  <p>Saldo: <span id="saldo">0.00</span> MZN</p>
+  <h2>Bem-vindo ao Painel</h2>
+  <p>Saldo atual: <span id="saldo">0.00</span> MZN</p>
 
-  <h3>Solicitar Pagamento</h3>
-  <select id="metodo">
-    <option value="M-Pesa">M-Pesa</option>
-    <option value="E-Mola">E-Mola</option>
-    <option value="PayPal">PayPal</option>
-    <option value="Visa">Visa</option>
-  </select>
-  <input type="text" id="dados" placeholder="Número ou email" />
-  <button onclick="solicitarSaque()">Sacar</button>
+  <section>
+    <h3>🛒 Comprar Saldo</h3>
+    <a href="https://mpesa.vm.co.mz/Pay?ref=258862592983" target="_blank">
+      <button>Comprar com M-Pesa</button>
+    </a>
+    <a href="https://e-mola.movitel.co.mz/Pay?ref=258848611516" target="_blank">
+      <button>Comprar com E-Mola</button>
+    </a>
+  </section>
 
-  <script src="saque.js"></script>
+  <section>
+    <h3>🎁 Ofertas e Produtos</h3>
+    <ul>
+      <li>Ebook exclusivo: <a href="#">Baixar grátis</a></li>
+      <li>Curso de culinária: <a href="#">Assistir agora</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>💳 Solicitar Saque</h3>
+    <select id="metodo">
+      <option value="M-Pesa">M-Pesa</option>
+      <option value="E-Mola">E-Mola</option>
+    </select>
+    <input type="text" id="dados" placeholder="Número M-Pesa/E-Mola" />
+    <button onclick="solicitarSaque()">Sacar</button>
+  </section>
 </body>
 </html>
