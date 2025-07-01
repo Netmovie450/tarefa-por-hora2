@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - Aprovar Saques</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script type="module" src="firebase.js"></script>
+</head>
+<body class="p-4 bg-light">
+  <div class="container">
+    <h2 class="mb-4 text-center">🧾 Aprovar Solicitações de Saque</h2>
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Usuário</th>
+          <th>Telefone</th>
+          <th>Método</th>
+          <th>Valor</th>
+          <th>Status</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody id="lista-saques"></tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    const db = getFirestore();
+
+    async function carregarSaques() {
+      const querySnapshot = await getDocs(collection(db, "saques"));
+      const lista = document.getElementById("lista-saques");
+      lista.innerHTML = "";
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.status === "Pendente") {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${data.usuario}</td>
+            <td>${data.telefone}</td>
+            <td>${data.metodo}</td>
+            <td>${data.valor} MZN</td>
+            <td>${data.status}</td>
+            <td><button class="btn btn-success btn-sm" onclick="aprovar('${docSnap.id}')">Aprovar</button></td>
+          `;
+          lista.appendChild(tr);
+        }
+      });
+    }
+
+    window.aprovar = async (id) => {
+      const ref = doc(db, "saques", id);
+      await updateDoc(ref, { status: "Aprovado" });
+      alert("✅ Solicitação aprovada!");
+      carregarSaques();
+    };
+
+    carregarSaques();
+  </script>
+</body>
+</html>

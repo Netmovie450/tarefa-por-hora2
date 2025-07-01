@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tarefa por Hora - Painel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script type="module" src="firebase.js"></script>
+  <style>
+    body {
+      background-color: #f7f9fb;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .btn {
+      width: 100%;
+      border-radius: 0.5rem;
+    }
+    .icon {
+      font-size: 1.3rem;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body class="p-3">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">🎯 Tarefa por Hora</h2>
+      <p>Bem-vindo, <span id="user" class="fw-semibold">Usuário</span></p>
+      <h5 class="text-success">💰 Saldo atual: <span id="saldo">0.00</span> MZN</h5>
+    </div>
+
+    <div class="card p-3">
+      <button class="btn btn-outline-primary mb-2" onclick="ganhar(0.5)">📝 Inquérito - Ganhe 0.50 MZN</button>
+      <button class="btn btn-outline-success mb-2" onclick="ganhar(0.2)">🎬 Assistir Vídeo - Ganhe 0.20 MZN</button>
+      <button class="btn btn-outline-warning mb-2" onclick="ganhar(0.3)">🎮 Jogar - Ganhe 0.30 MZN</button>
+      <button class="btn btn-outline-info mb-2" onclick="ganhar(0.4)">✍️ Postar - Ganhe 0.40 MZN</button>
+    </div>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-danger" onclick="sair()">🚪 Sair</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const auth = getAuth();
+    const db = getFirestore();
+    let uid = "";
+
+    async function carregarSaldo(userId) {
+      const ref = doc(db, "usuarios", userId);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        document.getElementById("saldo").innerText = snap.data().saldo.toFixed(2);
+      } else {
+        await setDoc(ref, { saldo: 0 });
+        document.getElementById("saldo").innerText = "0.00";
+      }
+    }
+
+    async function ganhar(valor) {
+      const ref = doc(db, "usuarios", uid);
+      const snap = await getDoc(ref);
+      let atual = snap.data().saldo || 0;
+      atual += valor;
+      await updateDoc(ref, { saldo: atual });
+      document.getElementById("saldo").innerText = atual.toFixed(2);
+      alert(`✅ Você ganhou ${valor.toFixed(2)} MZN`);
+    }
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        uid = user.uid;
+        document.getElementById("user").innerText = user.phoneNumber || user.email;
+        carregarSaldo(uid);
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+
+    window.sair = () => signOut(auth).then(() => location.href = 'index.html');
+    window.ganhar = ganhar;
+  </script>
+</body>
+</html>
