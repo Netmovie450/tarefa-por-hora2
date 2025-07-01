@@ -1,32 +1,23 @@
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPhoneNumber, RecaptchaVerifier } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-const auth = window.auth;
+const auth = getAuth();
 
-window.register = () => {
+window.entrar = function () {
   const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => location.href = "painel.html")
-    .catch(alert);
-};
+  const senha = document.getElementById("senha").value;
+  const aceite = document.getElementById("aceite").checked;
 
-window.login = () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => location.href = "painel.html")
-    .catch(alert);
-};
+  if (!aceite) {
+    alert("Você deve aceitar os Termos e Condições.");
+    return;
+  }
 
-window.loginPhone = () => {
-  const phoneNumber = document.getElementById("phone").value;
-  window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', { size: 'invisible' }, auth);
-  signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-    .then(result => {
-      const code = prompt("Digite o código recebido via SMS:");
-      return result.confirm(code);
-    })
-    .then(() => location.href = "painel.html")
-    .catch(alert);
+  signInWithEmailAndPassword(auth, email, senha)
+    .then(() => window.location.href = "painel.html")
+    .catch(() => {
+      createUserWithEmailAndPassword(auth, email, senha)
+        .then(() => window.location.href = "painel.html")
+        .catch((error) => alert("Erro: " + error.message));
+    });
 };

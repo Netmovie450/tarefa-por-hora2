@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Comprar Internet</title>
+  <script src="firebase.js" type="module"></script>
+  <script src="comprar-mb.js" type="module"></script>
+</head>
+<body>
+  <h2>Comprar Pacotes de Internet</h2>
+  <label>Seu número:</label>
+  <input id="numero" placeholder="+258..." />
+  <select id="pacote">
+    <option value="500MB">500MB - 10 MZN</option>
+    <option value="1GB">1GB - 30 MZN</option>
+    <option value="5GB">5GB - 50 MZN</option>
+  </select>
+  <button onclick="comprar()">Comprar</button>
+</body>
+</html>
