@@ -6,28 +6,21 @@
   <title>Painel - Tarefa por Hora</title>
   <script src="firebase.js" type="module"></script>
   <script src="painel.js" type="module"></script>
-  <script async src="ads.js"></script>
 </head>
 <body>
   <h2>Bem-vindo ao Painel</h2>
   <p>Saldo atual: <span id="saldo">0.00</span> MZN</p>
 
   <section>
-    <h3>🛒 Comprar Saldo</h3>
-    <a href="https://mpesa.vm.co.mz/Pay?ref=258862592983" target="_blank">
-      <button>Comprar com M-Pesa</button>
-    </a>
-    <a href="https://e-mola.movitel.co.mz/Pay?ref=258848611516" target="_blank">
-      <button>Comprar com E-Mola</button>
+    <h3>🛒 Comprar Megabytes</h3>
+    <a href="comprar-mb.html">
+      <button>Comprar Internet</button>
     </a>
   </section>
 
   <section>
-    <h3>🎁 Ofertas e Produtos</h3>
-    <ul>
-      <li>Ebook exclusivo: <a href="#">Baixar grátis</a></li>
-      <li>Curso de culinária: <a href="#">Assistir agora</a></li>
-    </ul>
+    <h3>📄 Histórico de Compras</h3>
+    <ul id="historico"></ul>
   </section>
 
   <section>

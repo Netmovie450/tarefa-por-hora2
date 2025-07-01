@@ -13,7 +13,10 @@ onAuthStateChanged(auth, (user) => {
   }
 
   const lista = document.getElementById("saques");
+  const ranking = document.getElementById("ranking");
+
   const saquesRef = ref(db, "saques");
+  const comprasRef = ref(db, "comprasMB");
 
   onValue(saquesRef, (snapshot) => {
     lista.innerHTML = "";
@@ -28,6 +31,22 @@ onAuthStateChanged(auth, (user) => {
         <button onclick="aprovarSaque('\${key}')">Aprovar</button>
       \`;
       lista.appendChild(item);
+    });
+  });
+
+  onValue(comprasRef, (snapshot) => {
+    const contagem = {};
+    snapshot.forEach(child => {
+      const { email } = child.val();
+      contagem[email] = (contagem[email] || 0) + 1;
+    });
+
+    const ordenado = Object.entries(contagem).sort((a, b) => b[1] - a[1]);
+    ranking.innerHTML = "";
+    ordenado.forEach(([email, total]) => {
+      const li = document.createElement("li");
+      li.textContent = \`\${email}: \${total} compra(s)\`;
+      ranking.appendChild(li);
     });
   });
 });

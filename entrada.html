@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Termos de Uso - Tarefa por Hora</title>
+</head>
+<body>
+  <h2>Antes de começar...</h2>
+  <p>Leia e aceite nossos <a href="termos.html" target="_blank">Termos e Condições</a> para continuar:</p>
+  <button onclick="continuar()">✅ Aceito e Continuar</button>
+
+  <script>
+    function continuar() {
+      localStorage.setItem("aceitou_termos", "sim");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

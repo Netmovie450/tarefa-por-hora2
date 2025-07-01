@@ -2,8 +2,13 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Login - Tarefa por Hora</title>
+  <script>
+    if (localStorage.getItem("aceitou_termos") !== "sim") {
+      window.location.href = "entrada.html";
+    }
+  </script>
   <script src="firebase.js" type="module"></script>
   <script src="auth.js" type="module"></script>
 </head>
@@ -11,7 +16,6 @@
   <h2>Login ou Cadastro</h2>
   <input type="email" id="email" placeholder="Email" />
   <input type="password" id="senha" placeholder="Senha" />
-  <label><input type="checkbox" id="aceite" /> Li e aceito os <a href="termos.html" target="_blank">Termos e Condições</a></label><br />
   <button onclick="entrar()">Entrar / Cadastrar</button>
 </body>
 </html>

@@ -1,5 +1,5 @@
 
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
 const auth = getAuth();
@@ -12,9 +12,26 @@ onAuthStateChanged(auth, (user) => {
   } else {
     if (user.email === "netmovie450@gmail.com") {
       window.location.href = "admin.html";
-    } else {
-      document.getElementById("saldo").textContent = "5.00"; // Simulação para usuário normal
+      return;
     }
+
+    document.getElementById("saldo").textContent = "5.00"; // Simulação
+
+    // Mostrar histórico de compras de MB
+    const histRef = ref(db, "comprasMB");
+    const ul = document.getElementById("historico");
+
+    onValue(histRef, (snapshot) => {
+      ul.innerHTML = "";
+      snapshot.forEach((child) => {
+        const item = child.val();
+        if (item.email === user.email) {
+          const li = document.createElement("li");
+          li.textContent = `${item.pacote} para ${item.numero} [${item.status}]`;
+          ul.appendChild(li);
+        }
+      });
+    });
   }
 });
 
@@ -38,4 +55,4 @@ window.solicitarSaque = function () {
   }).then(() => {
     alert("Solicitação enviada!");
   }).catch(err => alert("Erro: " + err.message));
-}
+};
