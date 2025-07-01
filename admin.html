@@ -2,64 +2,15 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Painel do Administrador - Tarefa por Hora</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script type="module" src="firebase.js"></script>
+  <meta charset="UTF-8">
+  <title>Painel do Administrador</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
+  <script src="firebase.js"></script>
+  <script src="admin.js"></script>
 </head>
-<body class="p-4">
-  <div class="container">
-    <h2 class="mb-4 text-center">📊 Painel do Administrador</h2>
-    <table class="table table-bordered table-hover">
-      <thead class="table-dark">
-        <tr>
-          <th>Email / Telefone</th>
-          <th>Saldo (MZN)</th>
-        </tr>
-      </thead>
-      <tbody id="tabela-usuarios"></tbody>
-    </table>
-    <div class="text-center mt-4">
-      <button class="btn btn-success" onclick="exportar()">📁 Exportar CSV</button>
-    </div>
-  </div>
-
-  <script type="module">
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    const db = getFirestore();
-
-    async function carregarUsuarios() {
-      const querySnapshot = await getDocs(collection(db, "usuarios"));
-      const tbody = document.getElementById("tabela-usuarios");
-      tbody.innerHTML = "";
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${data.nome || "N/A"}</td>
-          <td>${(data.saldo || 0).toFixed(2)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    window.exportar = async () => {
-      const querySnapshot = await getDocs(collection(db, "usuarios"));
-      let csv = "Email/Telefone,Saldo\n";
-      querySnapshot.forEach(doc => {
-        const d = doc.data();
-        csv += `${d.nome || "N/A"},${(d.saldo || 0).toFixed(2)}\n`;
-      });
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "usuarios.csv";
-      a.click();
-    };
-
-    carregarUsuarios();
-  </script>
+<body>
+  <h2>Solicitações de Saque</h2>
+  <div id="lista-saques"></div>
 </body>
 </html>
