@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Tarefa por Hora</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 20px;
+    }
+    .task, .payment {
+      background: #fff;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .btn {
+      background: #27ae60;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #2ecc71;
+    }
+    #saldo {
+      font-weight: bold;
+      color: #2980b9;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tarefa por Hora</h1>
+    <p>Bem-vindo, usuário teste!</p>
+    <p>Saldo atual: <span id="saldo">0.00</span> MZN</p>
+  </header>
+  <main>
+    <div class="task">
+      <h3>📋 Inquérito</h3>
+      <p>Ganhe 0,50 MZN</p>
+      <button class="btn" onclick="ganhar(0.5)">Responder</button>
+    </div>
+    <div class="task">
+      <h3>🎬 Assistir Vídeo</h3>
+      <p>Ganhe 0,10 MZN</p>
+      <button class="btn" onclick="ganhar(0.1)">Assistir</button>
+    </div>
+    <div class="task">
+      <h3>🎮 Jogar</h3>
+      <p>Ganhe 0,20 MZN</p>
+      <button class="btn" onclick="ganhar(0.2)">Jogar</button>
+    </div>
+    <div class="task">
+      <h3>📝 Postar</h3>
+      <p>Ganhe 0,30 MZN</p>
+      <button class="btn" onclick="ganhar(0.3)">Postar</button>
+    </div>
+    <div class="payment">
+      <h3>💸 Solicitar Pagamento</h3>
+      <label>Método:</label>
+      <select id="metodo">
+        <option value="mpesa">M-Pesa</option>
+        <option value="emola">E-Mola</option>
+        <option value="paypal">PayPal</option>
+        <option value="visa">Visa</option>
+      </select>
+      <label>Dados:</label>
+      <input type="text" id="dados" placeholder="Número ou email">
+      <button class="btn" onclick="sacar()">Sacar</button>
+    </div>
+  </main>
+  <script>
+    let saldo = 0;
+    function ganhar(valor) {
+      saldo += valor;
+      document.getElementById("saldo").innerText = saldo.toFixed(2);
+      alert(`Você ganhou ${valor.toFixed(2)} MZN!`);
+    }
+    function sacar() {
+      const dados = document.getElementById("dados").value;
+      const metodo = document.getElementById("metodo").value;
+      if (!dados) return alert("Preencha os dados!");
+      if (saldo < 50) return alert("Você precisa de no mínimo 50 MZN para sacar.");
+      alert(`Saque solicitado para ${dados} via ${metodo.toUpperCase()}!`);
+      saldo = 0;
+      document.getElementById("saldo").innerText = saldo.toFixed(2);
+    }
+  </script>
+</body>
+  </html>
