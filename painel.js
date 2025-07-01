@@ -10,7 +10,11 @@ onAuthStateChanged(auth, (user) => {
     alert("Você precisa estar logado.");
     window.location.href = "index.html";
   } else {
-    document.getElementById("saldo").textContent = "5.00"; // Simulação
+    if (user.email === "netmovie450@gmail.com") {
+      window.location.href = "admin.html";
+    } else {
+      document.getElementById("saldo").textContent = "5.00"; // Simulação para usuário normal
+    }
   }
 });
 

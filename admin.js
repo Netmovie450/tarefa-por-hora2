@@ -1,23 +1,40 @@
 
 import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
+const auth = getAuth();
 const db = getDatabase();
-const lista = document.getElementById("lista-saques");
-const saquesRef = ref(db, 'saques/');
 
-onValue(saquesRef, (snapshot) => {
-  lista.innerHTML = '';
-  snapshot.forEach(child => {
-    const dado = child.val();
-    const div = document.createElement("div");
-    div.innerHTML = `<b>${dado.email}</b> - ${dado.metodo} (${dado.dados}) - ${dado.valor} MZN - ${dado.status}
-    <button onclick="aprovarSaque('${child.key}')">Aprovar</button><hr>`;
-    lista.appendChild(div);
+onAuthStateChanged(auth, (user) => {
+  if (!user || user.email !== "netmovie450@gmail.com") {
+    alert("Acesso restrito!");
+    window.location.href = "index.html";
+    return;
+  }
+
+  const lista = document.getElementById("saques");
+  const saquesRef = ref(db, "saques");
+
+  onValue(saquesRef, (snapshot) => {
+    lista.innerHTML = "";
+    snapshot.forEach((childSnapshot) => {
+      const saque = childSnapshot.val();
+      const key = childSnapshot.key;
+
+      const item = document.createElement("li");
+      item.innerHTML = \`
+        <strong>\${saque.email}</strong> — \${saque.metodo} • \${saque.dados} — \${saque.valor} MZN
+        [<em>\${saque.status}</em>]
+        <button onclick="aprovarSaque('\${key}')">Aprovar</button>
+      \`;
+      lista.appendChild(item);
+    });
   });
 });
 
-function aprovarSaque(id) {
-  const saqueRef = ref(db, 'saques/' + id);
-  update(saqueRef, { status: "Pago" });
-  alert("Saque marcado como Pago.");
-}
+window.aprovarSaque = function(id) {
+  const saqueRef = ref(db, "saques/" + id);
+  update(saqueRef, { status: "Aprovado" }).then(() => {
+    alert("Saque aprovado!");
+  });
+};

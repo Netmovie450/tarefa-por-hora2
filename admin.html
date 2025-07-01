@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Painel do Administrador</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
-  <script src="firebase.js"></script>
-  <script src="admin.js"></script>
+  <script src="firebase.js" type="module"></script>
+  <script src="admin.js" type="module"></script>
 </head>
 <body>
-  <h2>Solicitações de Saque</h2>
-  <div id="lista-saques"></div>
+  <h2>Painel do Administrador</h2>
+  <ul id="saques">
+    <li>Carregando saques...</li>
+  </ul>
 </body>
 </html>
